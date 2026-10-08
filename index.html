@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Technical Helper: What is it used for?</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#3c3c3c;--mute:#777;--line:#e5e5e5;--green:#58cc02;--gd:#58a700;--blue:#1cb0f6;--bd:#1899d6;--red:#ff4b4b;--rd:#ea2b2b;--gbg:#d7ffb8;--rbg:#ffdfe0;--sel:#ddf4ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131f24;--fg:#e5eef2;--mute:#8da0a8;--line:#37464f;--gbg:#1f3a12;--rbg:#40191b;--sel:#16384a}}
+:root[data-theme="dark"]{--bg:#131f24;--fg:#e5eef2;--mute:#8da0a8;--line:#37464f;--gbg:#1f3a12;--rbg:#40191b;--sel:#16384a}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Nunito,system-ui,sans-serif;font-weight:600}
+#app{max-width:640px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:16px 20px 0}
+.top{display:flex;align-items:center;gap:14px}
+.bar{flex:1;height:16px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px;transition:width .35s}
+.hearts{font-weight:900;color:var(--red);min-width:44px;text-align:right}
+main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:28px 0}
+.tag{align-self:flex-start;font-weight:800;color:var(--blue);margin-bottom:8px}
+h1{font-size:28px;font-weight:900;margin:0 0 20px;line-height:1.25}
+.code{display:inline-block;background:var(--sel);color:var(--bd);border-radius:12px;padding:2px 12px;font-weight:900}
+.opts{display:grid;gap:12px}
+.opt{font:inherit;font-weight:800;font-size:17px;text-align:left;color:var(--fg);background:var(--bg);border:2px solid var(--line);border-bottom-width:5px;border-radius:16px;padding:14px 18px;cursor:pointer}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.opt.sel{background:var(--sel);border-color:var(--blue)}
+.opt.ok{background:var(--gbg);border-color:var(--green)}
+.opt.no{background:var(--rbg);border-color:var(--red)}
+.opt:active{transform:translateY(2px);border-bottom-width:3px}
+.foot{margin:0 -20px;padding:18px 20px 22px;border-top:2px solid var(--line)}
+.foot.ok{background:var(--gbg);border-color:transparent}.foot.no{background:var(--rbg);border-color:transparent}
+.fb{font-weight:900;font-size:21px;margin-bottom:4px}
+.foot.ok .fb{color:var(--gd)}.foot.no .fb{color:var(--rd)}
+.ex{margin:0 0 14px;font-weight:600}
+.btn{display:block;width:100%;font:inherit;font-weight:900;font-size:17px;color:#fff;background:var(--green);border:0;border-bottom:5px solid var(--gd);border-radius:16px;padding:14px;cursor:pointer}
+.btn:disabled{background:var(--line);border-color:var(--line);color:var(--mute);cursor:default}
+.foot.no .btn{background:var(--red);border-bottom-color:var(--rd)}
+.btn.blue{background:var(--blue);border-bottom-color:var(--bd)}
+.end{text-align:center}
+.end .big{font-size:64px;font-weight:900;color:var(--green);line-height:1}
+.end p{color:var(--mute);margin:8px 0 22px}
+.row{display:grid;gap:12px;max-width:340px;margin:0 auto}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media(prefers-reduced-motion:reduce){.shake{animation:none}.bar i{transition:none}}
+
+.x{font:inherit;font-size:22px;font-weight:900;color:var(--mute);background:none;border:0;cursor:pointer;padding:4px 6px}
+.menu{justify-content:flex-start}
+.menu h1{margin-bottom:6px}.sub{margin:0;color:var(--mute)}
+.menu h2{font-size:16px;font-weight:800;color:var(--mute);margin:24px 0 10px}
+.mode b{display:block;font-size:18px;font-weight:900}.mode span{display:block;font-weight:600;color:var(--mute);margin-top:2px}.mode small{display:block;font-weight:800;color:var(--gd);margin-top:4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-weight:800;color:var(--fg);background:var(--bg);border:2px solid var(--line);border-bottom-width:4px;border-radius:99px;padding:8px 16px;cursor:pointer}
+.chip.sel{background:var(--sel);border-color:var(--blue);color:var(--bd)}
+.chip:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.foot.stick{position:sticky;bottom:0;background:var(--bg)}
+.btn.ghost{background:none;color:var(--bd);border:2px solid var(--line);border-bottom-width:5px}
+.cv{background:var(--sel);border-radius:14px;padding:12px 16px;margin-bottom:16px;font-size:16px;font-weight:700;line-height:1.55}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// [prompt, correct, [wrong answers], explanation]
+const Q=[
+["Python","Data Science","Data Science","Frontend|Mobile|Embedded".split("|"),"Pandas, NumPy and scikit-learn make Python the go-to for data work."],
+["JavaScript","Frontend","Frontend","Data Science|DevOps|Game Engines".split("|"),"JavaScript is the only language that runs natively in every browser."],
+["Go","Cloud & DevOps","Cloud & DevOps","Frontend|Data Science|Mobile".split("|"),"Docker and Kubernetes are written in Go. It's fast and ships as one binary."],
+["Rust","Systems","Systems","Data Science|Frontend|Spreadsheets".split("|"),"Rust gives C-like speed with memory safety, so it's popular for systems work."],
+["Swift","Mobile","Mobile","Backend|Data Science|DevOps".split("|"),"Swift is Apple's language for iPhone, iPad and Mac apps."],
+["Kotlin","Mobile","Mobile","Data Science|Frontend|Embedded".split("|"),"Kotlin is Google's preferred language for Android apps."],
+["SQL","Databases","Databases","Mobile|Frontend|Game Engines".split("|"),"SQL is how you query and shape data in relational databases."],
+["C#","Game Dev","Game Dev","Data Science|Embedded|DevOps".split("|"),"C# powers Unity, one of the most used game engines. It's also big on .NET backends."],
+["R","Statistics","Statistics","Mobile|Frontend|DevOps".split("|"),"R was built by statisticians for analysis and plotting."],
+["C","Embedded","Embedded","Frontend|Data Science|Cloud".split("|"),"C runs close to the hardware, so it's everywhere in firmware and operating systems."],
+["TypeScript","Frontend","Frontend (typed JavaScript)","Data Science|Embedded|Mobile only".split("|"),"TypeScript adds types to JavaScript and is now standard on big web apps."],
+["Terraform (HCL)","Infrastructure","Infrastructure as Code","Frontend|Game Dev|Data Science".split("|"),"Terraform describes cloud resources in code so you can create them repeatably."],
+["Bash","DevOps","DevOps & automation","Frontend|Mobile|Data Science".split("|"),"Shell scripts glue together servers, CI jobs and everyday tooling."],
+["PHP","Backend","Backend web","Mobile|Data Science|Embedded".split("|"),"PHP powers WordPress and a huge share of the server-side web."],
+["Java","Backend","Enterprise backend","Frontend|Data Science|DevOps".split("|"),"Java runs large banking and enterprise systems. It's also the classic Android language."],
+["Julia","Scientific","Scientific computing","Mobile|Frontend|Backend CRUD".split("|"),"Julia aims to be as easy as Python and as fast as C for number crunching."],
+["Dart","Cross-platform apps","Cross-platform apps (Flutter)","Data Science|DevOps|Databases".split("|"),"Flutter apps are written in Dart and run on iOS, Android and web."],
+["Ruby","Backend","Backend web (Rails)","Embedded|Data Science|Game Engines".split("|"),"Ruby on Rails made rapid backend development popular."],
+["YAML","DevOps","DevOps config","Frontend|Mobile|Game Dev".split("|"),"YAML defines CI pipelines, Kubernetes manifests and cloud configs."],
+["C++","Game Engines","Game engines & performance","Frontend|DevOps|Spreadsheets".split("|"),"Unreal Engine and many high-performance apps are built in C++."],
+["Which language is the usual pick for training a machine learning model?","Python","Python","PHP|Swift|Bash".split("|"),"PyTorch and TensorFlow are Python-first."],
+["You need to style and add interactivity to a web page. What do you use?","JavaScript","JavaScript","SQL|Rust|Terraform".split("|"),"CSS handles the style, JavaScript the behavior."],
+["Which language would you pick to write a small, fast CLI tool for cloud infrastructure?","Go","Go","R|Swift|PHP".split("|"),"Go compiles to a single binary that's easy to deploy anywhere."],
+["You want to query customer orders from a Postgres database. What do you write?","SQL","SQL","Dart|Julia|HTML".split("|"),"SQL is the standard language of relational databases."],
+["Which is best for building an iOS app natively?","Swift","Swift","Kotlin|Ruby|Go".split("|"),"Swift is Apple's modern language for its platforms."],
+["Which language is commonly used to automate server tasks in a CI pipeline?","Bash","Bash","Swift|R|Dart".split("|"),"Bash scripts run on almost every Linux server and CI runner."],
+["Which language would you reach for to write firmware for a microcontroller?","C","C","JavaScript|Ruby|R".split("|"),"C gives direct hardware control with tiny memory use."],
+["Which is a classic choice for statistical analysis and charts for researchers?","R","R","Go|Kotlin|PHP".split("|"),"R and its tidyverse are staples in academia and biostatistics."],
+["Which language is mainly used to write Unity game scripts?","C#","C#","Go|Perl|R".split("|"),"Unity scripting is done in C#."],
+["Which language would you pick to build a type-safe React frontend?","TypeScript","TypeScript","Rust|Bash|SQL".split("|"),"TypeScript catches bugs at compile time in large UI codebases."],
+// --- Recruiter pack: frameworks, tools, cloud, roles ---
+["React","Frontend","Frontend (UI library)","Data Science|DevOps|Embedded".split("|"),"React builds web UIs from components. Candidates usually pair it with JavaScript or TypeScript."],
+["Django","Backend","Backend web (Python)","Frontend|Mobile|DevOps".split("|"),"Django is a batteries-included Python web framework. Flask and FastAPI are its lighter cousins."],
+["Spring Boot","Backend","Backend (Java)","Frontend|Data Science|Game Dev".split("|"),"Spring Boot is the dominant Java framework for enterprise backends and microservices."],
+["Node.js","Backend","Backend (JavaScript runtime)","Mobile only|Data Science|Embedded".split("|"),"Node.js runs JavaScript on the server, so one language can cover frontend and backend."],
+["Kubernetes","DevOps","DevOps (container orchestration)","Frontend|Data Science|Mobile".split("|"),"Kubernetes (K8s) runs and scales containers. Look for it alongside Docker."],
+["Docker","DevOps","DevOps (containers)","Frontend|Data Science|Game Dev".split("|"),"Docker packages apps and their dependencies into containers that run the same everywhere."],
+["Apache Spark","Data Engineering","Big data processing","Frontend|Mobile|Game Dev".split("|"),"Spark processes huge datasets across clusters. It's common in data engineering roles."],
+["Airflow","Data Engineering","Data pipeline scheduling","Frontend|Mobile|Embedded".split("|"),"Apache Airflow schedules and monitors data pipelines. It's a data engineer keyword."],
+["Jenkins","DevOps","CI/CD automation","Frontend|Data Science|Mobile".split("|"),"Jenkins automates building, testing and deploying code. GitHub Actions and GitLab CI are alternatives."],
+["Ansible","DevOps","Configuration automation","Frontend|Mobile|Data Science".split("|"),"Ansible configures servers with YAML playbooks."],
+["PyTorch","Machine Learning","Machine learning","Frontend|DevOps|Databases".split("|"),"PyTorch and TensorFlow are the main deep learning frameworks."],
+["Pandas","Data Science","Data analysis (Python)","Frontend|Mobile|DevOps".split("|"),"Pandas is the standard Python library for tabular data work."],
+["Tableau","Data Analytics","BI and dashboards","Backend|DevOps|Embedded".split("|"),"Tableau and Power BI are for BI analysts building dashboards, not for software engineers."],
+["Flutter","Cross-platform apps","Cross-platform mobile apps","Data Science|DevOps|Databases".split("|"),"Flutter (Dart) and React Native build iOS and Android apps from one codebase."],
+["React Native","Cross-platform apps","Cross-platform mobile apps","Data Science|DevOps|Embedded".split("|"),"React Native lets JavaScript developers build mobile apps. It's a bridge skill for frontend people."],
+["PostgreSQL","Databases","Relational database","Frontend|DevOps|Mobile".split("|"),"Postgres is a popular open-source SQL database. MySQL is similar."],
+["MongoDB","Databases","NoSQL document database","Frontend|DevOps|Game Dev".split("|"),"MongoDB stores JSON-like documents. It's a NoSQL database, so it isn't queried with standard SQL."],
+["Redis","Databases","In-memory cache","Frontend|Mobile|Data Science".split("|"),"Redis keeps data in memory for fast caching and queues."],
+["Kafka","Data Engineering","Event streaming","Frontend|Mobile|Game Dev".split("|"),"Kafka moves real-time data between systems. It's common in backend and data platform roles."],
+["Unity","Game Dev","Game engine (C#)","Data Science|DevOps|Databases".split("|"),"Unity uses C#. Unreal Engine uses C++."],
+["Solidity","Blockchain","Smart contracts","Frontend|Mobile|Data Science".split("|"),"Solidity is the main language for Ethereum smart contracts."],
+["AWS Lambda","Cloud","Serverless compute","Frontend|Mobile|Data Science".split("|"),"Lambda runs code without managing servers. It's part of AWS's serverless offering."],
+["Azure","Cloud","Microsoft's cloud platform","Frontend|Database|Mobile OS".split("|"),"AWS, Azure and GCP are the big three cloud providers. Azure is strong in Microsoft-heavy companies."],
+["GraphQL","Backend","API query language","Frontend styling|Database|DevOps".split("|"),"GraphQL lets clients ask for exactly the data they need. It's an alternative to REST."],
+["Which is a Java developer, not a JavaScript developer?","Spring Boot","Someone with Spring Boot experience","Someone with React experience|Someone with Node.js experience|Someone with Vue experience".split("|"),"Java and JavaScript are different languages. Match keywords carefully."],
+["A role asks for Terraform, Kubernetes and AWS. What job is it?","DevOps / Cloud Engineer","DevOps / Cloud Engineer","Frontend Developer|Data Analyst|iOS Developer".split("|"),"Infrastructure as code, containers and cloud point to DevOps or platform roles."],
+["A role asks for Python, SQL, Spark and Airflow. What job is it?","Data Engineer","Data Engineer","Frontend Developer|Game Developer|QA Tester".split("|"),"Pipelines and big data tooling make this a data engineering role."],
+["A role asks for React, TypeScript, CSS and accessibility. What job is it?","Frontend Developer","Frontend Developer","DevOps Engineer|Data Scientist|DBA".split("|"),"These are the core frontend skills."],
+["A role asks for Swift, Xcode and UIKit or SwiftUI. What job is it?","iOS Developer","iOS Developer","Android Developer|Backend Developer|Data Engineer".split("|"),"Swift and Xcode are Apple platform tooling."],
+["A role asks for Kotlin, Jetpack Compose and Android Studio. What job is it?","Android Developer","Android Developer","iOS Developer|Data Scientist|DevOps Engineer".split("|"),"Kotlin and Jetpack Compose are the modern Android stack."],
+["A role asks for Python, PyTorch, statistics and experimentation. What job is it?","ML Engineer / Data Scientist","ML Engineer / Data Scientist","Frontend Developer|Network Admin|Game Developer".split("|"),"Modeling and statistics point to ML or data science."],
+["A role asks for C++, real-time systems and RTOS. What job is it?","Embedded Engineer","Embedded Engineer","Frontend Developer|Data Analyst|Scrum Master".split("|"),"RTOS (real-time operating system) means embedded software."],
+["A candidate knows Java well. Which language is the closest to learn quickly?","C#","C#","R|Bash|HTML".split("|"),"Java and C# are similar object-oriented languages. Strong engineers often switch quickly."],
+["A candidate knows Python well. Which backend framework is a natural fit?","FastAPI","FastAPI","Spring Boot|Rails|Laravel".split("|"),"FastAPI, Flask and Django are Python web frameworks."],
+["Which is the odd one out: React, Angular, Vue, Django?","Django","Django","React|Angular|Vue".split("|"),"React, Angular and Vue are frontend frameworks. Django is a backend framework."],
+["What does CI/CD stand for?","Continuous Integration / Continuous Delivery","Continuous Integration / Continuous Delivery","Code Inspection / Code Debugging|Cloud Infrastructure / Cloud Deployment|Compile Import / Compile Distribute".split("|"),"CI/CD automates testing and shipping code. It's a DevOps staple."],
+["What is a full-stack developer?","Works on both frontend and backend","Works on both frontend and backend","Only works on databases|Only works on mobile|Only works on servers".split("|"),"Full-stack engineers cover the UI, server logic and often the database."],
+["What does an SRE (Site Reliability Engineer) mainly focus on?","Keeping systems reliable and scalable","Keeping systems reliable and scalable","Designing logos|Writing marketing copy|Testing UI colours".split("|"),"SREs apply software engineering to operations: monitoring, incident response and automation."],
+["What does REST describe?","A style for designing web APIs","A style for designing web APIs","A database engine|A CSS framework|A mobile OS".split("|"),"REST APIs use HTTP verbs like GET and POST. It's a common backend requirement."],
+["What is a good first screening question for a junior Python candidate?","What have you built with Python?","What have you built with Python?","How many years of Python did you spend in 1995?|Do you know every library?|Can you recite the docs?".split("|"),"Ask about real projects first. Years of experience alone say little."],
+// --- Pack 3: security, QA, architecture, AI, plus more tools ---
+["OWASP","","Web security guidance","Frontend styling|Data pipelines|Game physics","OWASP publishes the Top 10 web vulnerabilities. Security roles cite it constantly."],
+["Splunk","","Log search and security monitoring","Mobile UI design|Game physics|Frontend styling","Splunk analyses machine logs. It's common in security (SIEM) and ops roles."],
+["What is SQL injection?","","A web attack that abuses database queries","A SQL speed-tuning trick|A database backup method|A type of index","Attackers slip SQL into user input. Parameterised queries prevent it."],
+["A role asks for penetration testing, Burp Suite and OWASP. What job is it?","","Security Engineer / Pentester","Backend Developer|Data Analyst|Mobile Developer","Pentesting and Burp Suite are security-specific skills."],
+["What does OAuth 2.0 mainly handle?","","Delegated authorization (e.g. Sign in with Google)","Database replication|CSS theming|Container scheduling","OAuth lets an app act on a user's behalf without seeing their password."],
+["What does a SOC analyst do?","","Monitors systems for security threats","Builds mobile apps|Trains ML models|Designs databases","SOC means Security Operations Center: alerts, triage and incident response."],
+["Selenium","","Browser test automation","Database admin|Game dev|Embedded flashing","Selenium drives real browsers to run automated UI tests."],
+["Jest","","JavaScript unit testing","Cloud hosting|Data pipelines|Mobile builds","Jest is the default test runner for many React and Node projects."],
+["Cypress","","End-to-end web testing","Container orchestration|Database migration|Game physics","Cypress tests web apps the way a user clicks through them."],
+["Postman","","API testing","Image editing|Cloud billing|Embedded flashing","Postman sends requests to APIs and checks the responses."],
+["What is an SDET?","","A developer who writes test automation","A sales development exec|A database admin|A network technician","Software Development Engineer in Test: coding skills plus a QA mindset."],
+["Which test checks that several components work together?","","Integration test","Unit test|Linting|Code formatting","Unit tests check one piece. Integration tests check the pieces together."],
+["What are microservices?","","An app split into small independent services","A tiny database|A mobile OS feature|A CSS layout","Each service owns one job and talks to the others over APIs."],
+["What is Git used for?","","Version control","Container hosting|Database queries|UI design","Git tracks code changes. GitHub and GitLab host Git repositories."],
+["What does API stand for?","","Application Programming Interface","Automated Program Integration|Applied Python Interpreter|Application Process Index","An API is how one piece of software talks to another."],
+["What is a load balancer for?","","Spreading traffic across servers","Compressing images|Encrypting databases|Compiling code","It keeps one server from being overwhelmed and survives failures."],
+["What does a CDN do?","","Serves content from servers near users","Compiles code|Stores passwords|Schedules jobs","A Content Delivery Network speeds up sites by caching close to visitors."],
+["What is Agile?","","An iterative way of delivering software","A programming language|A cloud provider|A database type","Agile teams ship in small increments. Scrum and Kanban are common flavours."],
+["TensorFlow","","Machine learning","Frontend styling|Mobile UI|Container orchestration","TensorFlow is Google's ML framework, alongside PyTorch."],
+["scikit-learn","","Classical machine learning (Python)","Frontend styling|Mobile UI|Container orchestration","scikit-learn covers regression, clustering and classification."],
+["Hugging Face","","Sharing and using AI models","Cloud billing|Mobile UI|Embedded flashing","Hugging Face hosts open models and tools like Transformers."],
+["What does LLM stand for?","","Large Language Model","Linear Learning Machine|Low-Level Memory|Logical Layer Module","LLMs power chatbots and many AI products."],
+["What does MLOps focus on?","","Deploying and monitoring ML models","Designing app icons|Writing SQL reports|Mobile testing","MLOps brings DevOps habits to machine learning in production."],
+["A role asks for prompt engineering, RAG and vector databases. What job is it?","","AI / LLM Engineer","DBA|Frontend Developer|Network Admin","RAG (retrieval-augmented generation) and vector stores are LLM app skills."],
+["Vue","","Frontend (JavaScript framework)","Data Science|DevOps|Embedded","Vue is a gentle-learning-curve alternative to React and Angular."],
+["Next.js","","Frontend (React framework)","Data Science|DevOps|Embedded","Next.js adds routing and server rendering to React."],
+["Tailwind CSS","","Frontend styling","Backend APIs|Data Science|DevOps","Tailwind styles pages with utility classes."],
+["Laravel","","Backend (PHP)","Frontend|Mobile|Data Science","Laravel is the most popular modern PHP framework."],
+["ASP.NET","","Backend (C# / .NET)","Frontend|Data Science|Embedded","ASP.NET is Microsoft's web framework, common in enterprises."],
+["Express","","Backend (Node.js framework)","Mobile|Data Science|DevOps","Express is the minimal web framework most Node.js APIs start with."],
+["GitHub Actions","","CI/CD automation","Frontend styling|Data Science|Game dev","GitHub Actions runs builds, tests and deploys from your repo."],
+["Prometheus","","Monitoring and metrics","Frontend styling|Game dev|Mobile UI","Prometheus pairs with Grafana dashboards in DevOps and SRE roles."],
+["Helm","","Kubernetes package manager","Frontend theming|Data pipelines|Mobile builds","Helm charts bundle Kubernetes config into reusable packages."],
+["Snowflake","","Cloud data warehouse","Frontend styling|Embedded flashing|Game dev","Snowflake stores and queries analytics data at scale."],
+["dbt","","Data transformation with SQL","Frontend styling|Mobile UI|Container orchestration","dbt is a staple of the modern analytics engineering stack."],
+["Elasticsearch","","Search and log analytics","Frontend styling|Game dev|Embedded flashing","Elasticsearch powers full-text search and the ELK logging stack."],
+["SwiftUI","","Mobile (iOS UI framework)","Data Science|DevOps|Databases","SwiftUI builds Apple app interfaces declaratively."],
+["Jetpack Compose","","Mobile (Android UI toolkit)","Data Science|DevOps|Databases","Compose is the modern way to build Android UIs in Kotlin."],
+["Elixir","","Concurrent, fault-tolerant systems","Data Science|Mobile UI|Frontend styling","Elixir runs on the Erlang VM, known for chat and messaging backends."],
+["Unreal Engine","","Game engine (C++)","Data Science|DevOps|Databases","Unreal uses C++ and Blueprints. Unity uses C#."],
+["What best describes a senior engineer?","","Owns design decisions and mentors others","Has the most years on the CV|Only writes code, never reviews|Knows every language","Seniority is about scope and judgment, not just time served."],
+["What is the difference between an engineering manager and a tech lead?","","Manager focuses on people, tech lead on technical direction","They are the same job|The manager writes all the code|The tech lead handles payroll","Candidates often mix these up in their search. Clarify what they want."],
+["A CV lists 15 languages, all as 'expert'. What is the best next step?","","Probe depth in their main two or three","Hire immediately|Reject automatically|Ignore the CV","Strong engineers go deep in a few areas. Ask for real examples."],
+["Which skill is usually easiest for a strong engineer to pick up on the job?","","A new framework in a language they know","Core CS fundamentals|Their first programming language|Systems design judgment","Frameworks change often. Fundamentals take much longer to build."],
+// --- Pack 4: in-topic questions (no domain giveaways) ---
+["Which tool is mainly used to bundle and build frontend code?","","Vite","Redux|Sass|ESLint","Vite and Webpack bundle and serve frontend code."],
+["What does the DOM represent?","","The page structure as a tree JavaScript can change","The browser's network cache|A CSS preprocessor|The server's file system","The Document Object Model is how scripts read and update the page."],
+["Which is a state management library for React apps?","","Redux","Sass|Vite|Prettier","Redux keeps shared app state in one predictable store."],
+["What does responsive design mean?","","Layouts that adapt to different screen sizes","Pages that load instantly|Pages that react to server errors|Animations that react to clicks","Responsive sites work on phones, tablets and desktops."],
+["Which of these is a CSS preprocessor?","","Sass","Babel|Vite|Prettier","Sass adds variables and nesting that compile to plain CSS."],
+["Which frontend framework is maintained by Google?","","Angular","Vue|React|Svelte","React comes from Meta. Vue and Svelte are community-led."],
+["What does an ORM do?","","Maps database tables to objects in code","Compresses API responses|Balances server traffic|Encrypts passwords","Examples: Hibernate, SQLAlchemy, Prisma."],
+["Which HTTP method normally creates a new resource in a REST API?","","POST","GET|DELETE|HEAD","GET reads, POST creates, PUT/PATCH update, DELETE removes."],
+["What does an HTTP 404 status code mean?","","Resource not found","Server crashed|Unauthorized|Request succeeded","500 means a server error and 401 means unauthorized."],
+["Which of these is a Python web framework?","","Flask","Laravel|Express|Rails","Laravel is PHP, Express is Node.js and Rails is Ruby."],
+["What is middleware in a web framework?","","Code that runs between a request and the final handler","A database driver|A UI component library|A cloud billing tool","It handles logging, auth and parsing before your route code."],
+["What does 'stateless' mean for an API?","","Each request carries everything needed to process it","It never returns errors|It has no database|It only serves static files","Stateless APIs scale easily because servers don't remember past requests."],
+["Which tool provisions cloud infrastructure from code?","","Terraform","Prometheus|Jenkins|Grafana","Prometheus monitors, Jenkins builds and Grafana visualises."],
+["What is the main job of Grafana?","","Dashboards for metrics and logs","Building container images|Provisioning servers|Running CI jobs","It's usually paired with Prometheus."],
+["Which AWS service is object storage?","","S3","EC2|RDS|Lambda","EC2 is virtual servers, RDS is managed databases."],
+["Which AWS service provides virtual servers?","","EC2","S3|DynamoDB|CloudFront","DynamoDB is a NoSQL database and CloudFront is a CDN."],
+["What is a Docker image?","","A packaged template used to start containers","A running container|A virtual machine disk|A Kubernetes cluster","Containers are running instances of images."],
+["What does 'infrastructure as code' mean?","","Managing infrastructure through versioned config files","Writing app code in the cloud|Hardware that codes itself|Documenting servers in a wiki","Changes are reviewed and repeatable, like application code."],
+["Which SQL clause filters rows before grouping?","","WHERE","HAVING|ORDER BY|LIMIT","HAVING filters after GROUP BY."],
+["What is the difference between ETL and ELT?","","In ELT, data is loaded before it's transformed","ELT never uses SQL|ETL only handles streaming data|They are identical","Modern warehouses often transform data after loading."],
+["What type of database is MongoDB?","","Document (NoSQL)","Relational|Graph|Time-series","It stores JSON-like documents."],
+["Which tool is typically used for in-memory caching?","","Redis","Snowflake|PostgreSQL|Tableau","Redis keeps data in RAM for speed."],
+["What does a data warehouse mainly support?","","Analytics across large historical data","Serving live web pages|Compiling code|Hosting containers","Warehouses are built for reporting, not for app transactions."],
+["Which Python library is the standard for tabular data?","","Pandas","Flask|PyTorch|Requests","Pandas DataFrames are the staple of analysis."],
+["Which IDE is required to build native iOS apps?","","Xcode","Android Studio|Eclipse|PyCharm","Xcode only runs on macOS."],
+["What is the main language for native Android development today?","","Kotlin","Swift|Dart|Objective-C","Java is still around, but Kotlin is preferred."],
+["Where do you publish iOS apps?","","App Store","Google Play|F-Droid|Microsoft Store","Android apps go on Google Play."],
+["Which framework is written in Dart?","","Flutter","React Native|Xamarin|Ionic","React Native uses JavaScript and Xamarin uses C#."],
+["What is a push notification?","","A server-sent message shown on the device outside the app","A background app update|A pull-down refresh gesture|An in-app popup","Apple and Google run the push services."],
+["Which is a cross-platform mobile framework?","","React Native","SwiftUI|Jetpack Compose|UIKit","The others are native to one platform."],
+["Which language is known for ownership and borrowing?","","Rust","C|Go|Java","This system prevents memory bugs at compile time."],
+["What does a game loop do?","","Repeatedly processes input, updates state and renders","Loads the game once at startup|Handles online payments|Compiles shaders only","Every frame runs through the loop."],
+["Which game engine uses C# for scripting?","","Unity","Unreal Engine|CryEngine|id Tech","Unreal uses C++."],
+["What is a memory leak?","","Memory that is allocated but never released","Data lost in a crash|Memory stolen by malware|A full disk","Leaks slowly eat RAM until the program struggles."],
+["What is the main role of a compiler?","","Translate source code into machine code","Run tests automatically|Manage package versions|Format source code","Interpreters execute code directly instead."],
+["Which language is most associated with Linux kernel development?","","C","Java|Python|Go","Rust is now being added too."],
+["What is regression testing?","","Re-testing that old features still work after changes","Testing only brand-new features|Testing under heavy traffic|Testing UI colours","It catches bugs introduced by new changes."],
+["What does a load test measure?","","How a system performs under heavy traffic","Whether the code compiles|UI layout accuracy|Password strength","Related: stress tests push past limits."],
+["Which is a performance testing tool?","","JMeter","Cypress|Jest|Postman","JMeter and k6 simulate many users."],
+["What is overfitting?","","A model that memorises training data and generalises poorly","A model that trains too slowly|A model with too few features|A model that uses too much memory","It scores well in training and badly on new data."],
+["Which task predicts a category such as spam or not spam?","","Classification","Regression|Clustering|Dimensionality reduction","Classification predicts labels."],
+["Which task predicts a continuous number such as house price?","","Regression","Classification|Clustering|Tokenisation","Regression predicts numeric values."],
+["What does HTTPS add over HTTP?","","Encryption of traffic in transit","Faster page loads|Automatic backups|Stronger CSS support","It uses TLS to protect data between browser and server."],
+["What is phishing?","","Tricking people into revealing credentials","Scanning ports on a server|Overloading a site with traffic|Brute-forcing encryption","It's a social engineering attack."],
+["What does multi-factor authentication add?","","A second proof of identity beyond a password","A longer password rule|Automatic password reset|Encrypted email","Such as an app code or hardware key."],
+// --- Pack 5 ---
+["What is a smoke test?","","A quick check that the most critical features work","A full test of every edge case|A security audit|A test of code style","It runs first. If it fails, deeper testing waits."],
+["What is test coverage?","","The share of code exercised by tests","The number of testers on a team|How long tests take to run|The number of bugs found","High coverage helps, but it doesn't prove the tests are good."],
+["What does TDD stand for?","","Test-Driven Development","Tool-Driven Deployment|Technical Design Document|Type-Defined Development","You write a failing test first, then the code that passes it."],
+["What is a flaky test?","","A test that passes and fails without code changes","A test that is too slow|A test with no assertions|A test written in another language","Flaky tests erode trust in a CI pipeline."],
+["What does a mock do in a unit test?","","Stands in for a real dependency","Measures page speed|Generates random users|Deploys the app","Mocks keep tests fast and isolated."],
+["What is exploratory testing?","","Testing without a script, using judgement to find bugs","Running automated suites overnight|Testing only in production|Testing only edge-case inputs","Skilled testers find bugs scripts miss."],
+["Which test type checks a complete user journey in a real browser?","","End-to-end test","Unit test|Static analysis|Load test","Tools like Cypress and Playwright do this."],
+["What is a neural network?","","A model of layered connected nodes that learns patterns","A computer network for GPUs|A database of images|A type of search index","Deep learning uses many layers."],
+["What is the purpose of a train/test split?","","Checking performance on data the model hasn't seen","Making training faster|Reducing storage cost|Labelling data automatically","It reveals overfitting."],
+["What is a vector embedding?","","A list of numbers that captures meaning","A compressed image|An encryption key|A database index type","Similar meanings get nearby vectors. Vector databases search them."],
+["Which technique gives an LLM access to external documents at answer time?","","RAG (retrieval-augmented generation)","Fine-tuning|Quantisation|Pruning","RAG fetches relevant text and adds it to the prompt."],
+["What is fine-tuning?","","Further training a pre-trained model on specific data","Adjusting a model's UI|Deleting unused layers|Compressing a model for phones","It adapts a general model to a task or style."],
+["What is a hallucination in an LLM?","","Confident output that is false or made up","A slow response|A refusal to answer|Output in the wrong language","Always verify important claims."],
+["Which of these is an unsupervised learning task?","","Clustering","Classification|Regression|Spam detection","Unsupervised learning finds structure without labels."],
+["What is cross-site scripting (XSS)?","","Injecting malicious scripts into pages other users view","A database backup technique|A CSS framework|A type of firewall","Escaping output prevents it."],
+["What does a firewall do?","","Filters network traffic by rules","Encrypts files on disk|Scans code for bugs|Backs up databases","It allows or blocks traffic."],
+["Why should passwords be hashed and salted?","","So a stolen database doesn't reveal the passwords","To make logins faster|To compress storage|To let admins read them","Hashing is one-way. Salting defeats precomputed lookups."],
+["What is the principle of least privilege?","","Give users only the access they need","Give everyone admin rights|Remove all passwords|Allow access from any device","It limits damage when an account is compromised."],
+["What is a zero-day vulnerability?","","A flaw with no fix available yet","A bug found on day one of a project|A bug that causes zero downtime|A test that runs in zero seconds","Attackers can exploit it before a patch exists."],
+["What does a VPN primarily provide?","","An encrypted tunnel for network traffic","Faster downloads|Antivirus scanning|Automatic backups","It protects traffic on untrusted networks."],
+["Which certification is commonly listed by security professionals?","","CISSP","AWS Cloud Practitioner|PMP|CCNA","PMP is project management and CCNA is networking."],
+["What is the difference between horizontal and vertical scaling?","","Horizontal adds machines, vertical adds power to one","Horizontal is for frontends only|Vertical adds more developers|They are the same","Horizontal scaling usually needs a load balancer."],
+["What does a message queue help with?","","Passing work between services asynchronously","Styling web pages|Encrypting traffic|Storing images","Examples: RabbitMQ, SQS, Kafka."],
+["What does caching do?","","Stores results to serve repeat requests faster","Encrypts requests|Deletes old data|Splits databases","It cuts latency and backend load."],
+["What is technical debt?","","Future cost created by shortcuts in code","Money owed to vendors|Unused cloud credit|Salary owed to developers","Debt slows teams down until it's paid off."],
+["What is the CAP theorem about?","","Trade-offs in distributed systems","Code formatting rules|Cloud pricing|Mobile app permissions","Consistency, availability, partition tolerance."],
+["Which CSS layout module is built for one-dimensional rows or columns?","","Flexbox","Sass|Keyframes|Z-index","CSS Grid handles two dimensions."],
+["What does accessibility (a11y) in frontend work aim for?","","Making sites usable by people with disabilities","Making sites load offline|Making sites rank higher|Making sites cheaper to host","Think screen readers, keyboard use and contrast."],
+["What is a single-page application?","","An app that updates the page without full reloads","A site with only one HTML tag|A one-page PDF|A site with no JavaScript","React, Vue and Angular apps are often SPAs."],
+["What does an index do in a database table?","","Speeds up lookups on a column","Encrypts the column|Deletes duplicates|Backs up the table","Indexes trade extra storage for faster reads."],
+["What is rate limiting?","","Restricting how many requests a client can make","Slowing down all databases|Compressing responses|Hiding API errors","It protects APIs from abuse and overload."],
+["What is the main purpose of a JWT?","","Carrying signed identity claims between client and server","Compressing JSON|Scheduling jobs|Styling responses","JSON Web Tokens are widely used for API auth."],
+["What is a rolling deployment?","","Replacing instances gradually to avoid downtime","Deploying only on weekends|Rewriting the app each release|Deploying to one customer only","Old and new versions run side by side briefly."],
+["What does a Kubernetes pod contain?","","One or more containers that run together","A whole database cluster|A cloud account|A CI pipeline","A pod is the smallest deployable unit."],
+["What is blue-green deployment?","","Switching traffic between two identical environments","Testing on two browsers|Deploying twice a day|Using two cloud providers","Rollback is just switching back."],
+["What is a primary key?","","A column that uniquely identifies each row","The first column in a table|The password for a database|A column that must be numeric","Keys prevent duplicates and enable joins."],
+["Which join returns only rows with matches in both tables?","","INNER JOIN","LEFT JOIN|FULL OUTER JOIN|CROSS JOIN","LEFT JOIN keeps unmatched rows from the left table."],
+["What is data normalisation?","","Organising tables to reduce duplicated data","Making all values positive|Encrypting columns|Converting data to JSON","It keeps data consistent."],
+["What is an APK?","","An Android app package file","An iOS app bundle|A cloud function|A UI design file","iOS apps use IPA files."],
+["What does app sandboxing do?","","Isolates an app from other apps and system data","Speeds up app startup|Tests apps automatically|Shares data between all apps","It's a core mobile security feature."],
+["What is the difference between a process and a thread?","","A process has its own memory, threads share their process's memory","Threads have their own separate memory|A process is a thread with a UI|They are the same thing","Threads are lighter but need careful synchronisation."],
+["What does garbage collection do?","","Automatically frees unused memory","Deletes old files|Removes bugs|Cleans the cache folder","Java, Go and C# use it. C and Rust don't."],
+["A role asks for SLOs, incident response, Prometheus and Go. What job is it?","","Site Reliability Engineer","iOS Developer|Data Analyst|QA Tester","SLOs and on-call work are the SRE signature."],
+["A role asks for Selenium, Cypress and test plans. What job is it?","","QA / Test Automation Engineer","DevOps Engineer|Data Scientist|DBA","Test frameworks and test planning point to QA."],
+["A role asks for SQL, Tableau and stakeholder reporting. What job is it?","","Data Analyst","Backend Developer|Embedded Engineer|Pentester","Dashboards and reporting are analyst work."],
+["A role asks for Unity, C# and gameplay systems. What job is it?","","Game Developer","Data Engineer|SRE|Security Analyst","Unity plus C# is a classic gameplay programmer stack."],
+// --- Pack 6: screening scenarios ---
+["A job needs React, TypeScript and REST APIs. Which candidate fits best?","","A frontend dev with React and TypeScript projects","A backend dev with Spring Boot only|A data analyst with Tableau|An iOS dev with Swift","Match on the core stack first."],
+["A candidate has 5 years of Java and applies for a C# role. How should you treat the CV?","","A strong transferable fit, as the languages are very similar","Reject, wrong language|Reject, wrong seniority|Move to a frontend role","Java and C# share most concepts, so ramp-up is usually quick."],
+["A CV says 'used Kubernetes' and nothing else. What is the best follow-up question?","","What did you deploy on it, and what broke?","Do you like containers?|Can you spell Kubernetes?|Have you heard of Docker?","Ask for specifics that only hands-on users can answer."],
+["A role needs PostgreSQL. A candidate knows MySQL well. What is the fair read?","","Likely a quick ramp-up, since both are relational SQL databases","No relevant experience|A totally different skill|Only suited to NoSQL roles","Core SQL transfers. Note the gaps and ask."],
+["A job needs AWS. A candidate has strong Azure experience. What is the fair read?","","Core cloud concepts transfer, so ramp-up is usually quick","There is zero overlap|They must be AWS certified first|Only frontend roles fit","Compute, storage and networking ideas carry across providers."],
+["Which is the strongest signal of real Python experience?","","Describing a project: what they built and what went wrong","Python in the skills list|Python in their headline|A certificate with no projects","Concrete stories beat keyword lists."],
+["A candidate calls themselves full-stack but lists only HTML and CSS. What should you check?","","Whether they have real backend and database experience","Whether they own a laptop|Their favourite colour|Nothing, full-stack is confirmed","Full-stack needs both sides of the application."],
+["A hiring manager asks for 15 years of Kubernetes experience. What is the issue?","","Kubernetes only appeared in 2014, so it's unrealistic","Nothing, it's a reasonable ask|It's only for DevOps roles|Kubernetes is a language","Unrealistic requirements shrink the talent pool. Raise it with the manager."],
+["Which pair of skills best signals a data engineer rather than a data scientist?","","Airflow and Spark","Matplotlib and statistics|Tableau and Excel|Keras and PyTorch","Pipelines and big data tooling mean engineering."],
+["A candidate lists Swift and Objective-C. Which role fits?","","iOS developer","Android developer|DevOps engineer|Data scientist","Both are Apple platform languages."],
+["A manager wants one person for frontend, backend, DevOps and design. What should you do first?","","Clarify must-haves versus nice-to-haves","Advertise it as written|Search only for senior people|Split it into four jobs yourself","Most 'unicorn' briefs have a core need hiding in them."],
+["What is the fairest way to compare two candidates' technical skills?","","Ask both the same structured questions","Ask each different questions|Pick the one who talks more|Pick the one with more years","Structure reduces bias and makes answers comparable."],
+["A candidate asks whether the team runs a monolith or microservices. Why does it matter?","","It shapes the tooling, deployment and day-to-day work","It decides their salary|It decides the office layout|It doesn't matter","Good candidates ask architecture questions. Know the answer."],
+["A CV shows six jobs in three years, all short contracts. What should you do?","","Ask about the context, as contracting is common in tech","Reject immediately|Assume poor performance|Ignore the dates","Short stints can be contract work or project-based roles."],
+["A role needs a DevOps engineer. Which CV keyword is the closest match?","","CI/CD pipelines with Terraform","Photoshop and Figma|Unit tests only|SQL reporting","Automation and infrastructure are the DevOps core."],
+["Which question best tests whether a candidate understands REST?","","Which HTTP methods would you use to create, read, update and delete?","What colour is a 404 page?|How many APIs have you seen?|Do you like APIs?","Good screening questions need a concrete, checkable answer."],
+// --- Pack 7: recruiting focus ---
+["A role asks for Figma, user research and prototypes. What job is it?","","Product / UX Designer","DevOps Engineer|Data Analyst|Security Analyst","Research and prototyping are design work."],
+["A role asks for Python, Pandas and A/B testing. What job is it?","","Data Scientist","Mobile Developer|Network Engineer|Game Developer","Experimentation and analysis point to data science."],
+["A role asks for Cisco, routing and firewalls. What job is it?","","Network Engineer","Data Engineer|iOS Developer|QA Engineer","Routing and firewalls are network skills."],
+["A role asks for Java, Spring Boot and microservices. What job is it?","","Backend Developer","Frontend Developer|Data Analyst|Mobile Developer","Services and APIs are backend work."],
+["A role asks for roadmaps, stakeholders and user stories. What job is it?","","Product Manager","Site Reliability Engineer|Data Engineer|Security Engineer","Product managers decide what gets built and why."],
+["A role asks for Active Directory, Windows servers and tickets. What job is it?","","IT Systems Administrator","Frontend Developer|ML Engineer|Game Developer","Directory services and ticket queues are sysadmin work."],
+["A role asks for Scrum, sprint planning and removing blockers. What job is it?","","Scrum Master","Backend Developer|Security Analyst|Database Administrator","A Scrum Master coaches the team's process."],
+["A role asks for Hadoop, Hive and ETL jobs. What job is it?","","Data Engineer","Mobile Developer|UX Designer|Network Engineer","Big data pipelines are data engineering."],
+["A role asks for Verilog, FPGA and hardware timing. What job is it?","","Hardware / FPGA Engineer","Backend Developer|Data Analyst|Scrum Master","Verilog describes hardware, not software."],
+["A role asks for Shopify, PHP and theme customisation. What job is it?","","E-commerce Developer","Embedded Engineer|Data Scientist|Network Engineer","Shopify themes and stores are e-commerce work."],
+["A role asks for SIEM, threat hunting and incident reports. What job is it?","","Security Analyst","Backend Developer|UX Designer|Data Engineer","Threat hunting is a core security task."],
+["A role asks for SAP, ABAP and business processes. What job is it?","","SAP Developer / Consultant","Game Developer|Mobile Developer|Pentester","ABAP is SAP's own programming language."],
+["A role asks for Unreal, C++ and shaders. What job is it?","","Game / Graphics Programmer","Data Analyst|DevOps Engineer|QA Tester","Shaders and engines point to graphics programming."],
+["Which job title best matches Docker, Kubernetes, Helm and ArgoCD?","","Platform / DevOps Engineer","Frontend Developer|Data Scientist|Mobile Developer","Container tooling and GitOps are platform work."],
+["A role asks for ROS, C++ and sensors. What job is it?","","Robotics Engineer","Frontend Developer|Data Analyst|Scrum Master","ROS is the Robot Operating System."],
+["A candidate says they 'led' a project. What is the best follow-up?","","What was your exact role and who was on the team?","Which project name did you pick first?|Did you enjoy working on it overall?|Was the project well liked by users?","Probe scope and ownership, not just the title."],
+["A candidate struggles on a niche tool but explains concepts well. What is the fair read?","","Tool gaps are teachable, so weigh the concepts more","Reject them for missing the tool|Ignore the concepts entirely|Score them like a beginner","Concepts take years. Tools take weeks."],
+["A job ad lists 20 required skills. What should you do before searching?","","Ask the manager which 3 to 5 are truly essential","Search for all 20 at once|Remove half the skills yourself|Post the ad and wait for responses","Long lists hide the real must-haves."],
+["A candidate's GitHub profile is empty. Does that mean they can't code?","","No, plenty of engineers work in private repositories","Yes, they probably can't code|Yes, GitHub is always required|No, GitHub isn't real work","Never treat a public profile as a requirement."],
+["A candidate has an 8-month career gap. What is a fair approach?","","Ask neutrally and focus on their current skills","Treat it as an automatic red flag|Skip them without asking|Ask for detailed personal reasons","Gaps have many valid causes. Keep questions job-related."],
+["A candidate's salary expectation is far above the range. When should you raise it?","","Early in the screening call, before more time is spent","Only after the final interview|After the offer is drafted|Never, let the manager decide","Early alignment saves everyone's time."],
+["A candidate asks about remote work. How should you respond?","","Share the policy honestly, as it affects fit","Avoid answering until the offer|Say yes without checking|Tell them it doesn't matter","Hidden surprises lead to withdrawn offers."],
+["What is a good way to check a claimed 'senior' level?","","Ask about design decisions and trade-offs they owned","Count the years on their CV|Ask for the longest tool list|Check how many jobs they've had","Seniority shows in judgement, not duration."],
+["A candidate used a framework you don't recognise. What should you do?","","Ask what it does, then look up the details afterwards","Assume it isn't real|Skip the topic entirely|Tell them it isn't relevant","Curiosity beats bluffing. Candidates notice."],
+["Two candidates are close: one has the exact stack, one learns fast. What helps decide?","","The manager's timeline and how steep the ramp-up is","Whoever replied first|Whoever has the longer CV|A coin toss","Urgency and team support change the right answer."],
+["A candidate says their last team 'did everything'. What do you ask?","","Which parts did you personally build or own?","How big was the whole company?|What was the team's name?|Did the team get along?","Separate team output from individual contribution."],
+["A CV lists only technologies from 2008. What is the concern?","","Their skills may be dated, so ask about recent work","They are too senior for any role|The CV is certainly fake|Old skills never change","Check what they've done lately."],
+["A candidate withdraws after the technical interview. What is the most useful next step?","","Ask politely for feedback to improve the process","Send an angry follow-up|Remove them from the database|Offer a higher salary immediately","Withdrawals reveal process problems."],
+["A hiring manager rejects everyone for 'poor culture fit'. What do you do?","","Ask for specific, job-related reasons behind the feedback","Send more candidates unchanged|Accept the feedback silently|Lower the hiring standards","Vague feedback can hide bias or unclear needs."],
+["A candidate asks what the tech stack is. Why is that a good sign?","","It shows they care about the work they'll do","It shows they plan to leave soon|It shows they don't know the stack|It shows they want less pay","Good candidates evaluate the role too."],
+["What does ATS stand for in recruiting?","","Applicant Tracking System","Automated Talent Search|Applied Technical Survey|Advanced Testing Suite","An ATS stores applications and moves candidates through stages."],
+["What is time-to-fill?","","Days from opening a role to an accepted offer","Hours spent in one interview|Weeks a candidate waits for pay|Days from CV to phone screen","It's a core recruiting speed metric."],
+["What is a passive candidate?","","Someone employed and not actively job hunting","Someone who never replies to messages|Someone unemployed and waiting|Someone who only applies by email","Great engineers are often passive, so outreach matters."],
+["What is Boolean search used for in sourcing?","","Combining keywords with AND, OR and NOT","Searching only by job title|Ranking candidates by salary|Sending messages in bulk","It narrows results on LinkedIn and search engines."],
+["What is a notice period?","","Time an employee works after resigning before leaving","Time before an offer expires|Time between two interviews|Time spent in probation","It can range from days to several months."],
+["What is a counter-offer?","","A better offer from the current employer to keep someone","A lower offer after negotiation|A second interview invitation|A request for references","Ask candidates early how they'd react to one."],
+["What is a technical screen?","","A short check of core technical skills before deeper interviews","A full day of on-site interviews|A background check on references|A salary negotiation call","It filters early so interview time is used well."],
+["What is the main difference between a contractor and a permanent employee?","","Contractors are paid per day or project, usually without benefits","Contractors always earn less|Permanent staff are paid per day|There is no real difference","Contract rates are usually higher to compensate."],
+["What is the purpose of a job scorecard?","","To rate every candidate against the same criteria","To list the company's benefits|To track recruiter commissions|To show the interview schedule","It keeps feedback consistent and comparable."],
+["What is employer branding?","","How a company is seen as a place to work","A company's logo design|The price of its products|Its advertising budget","Strong branding attracts passive candidates."],
+["Why do recruiters use structured interviews?","","To compare candidates fairly and reduce bias","To make interviews shorter always|To avoid technical questions|To hire faster without feedback","Same questions, same scoring, fairer outcomes."],
+["What does offer-to-acceptance rate measure?","","The share of offers that candidates accept","The share of CVs that become interviews|The share of staff who stay a year|The share of roles filled internally","A low rate suggests pay, process or brand problems."],
+["What is the main impact of GDPR on recruiters?","","Candidate data must be handled lawfully and stored carefully","All CVs must be deleted daily|Recruiters may not contact anyone|Salaries must be published","Consent, purpose and retention all matter."],
+["What is a competing offer?","","Another company's offer the candidate is considering","A second job at the same firm|A raise from the manager|A recruiter's bonus plan","Know about it early so you can move quickly."],
+["What is a pipeline in recruiting?","","A pool of candidates at different hiring stages","A list of open job titles|A chain of recruiters|A set of interview questions","A healthy pipeline avoids starting from zero."],
+// --- Pack 8: CV screening ---
+["Backend Developer, 2019-2024 / Built REST APIs in Node.js and PostgreSQL / Cut API response time by 40% / Mentored two juniors||Which claim is best to probe first?","","How they got the 40% speed gain","Why they chose PostgreSQL|Who they mentored first|Which API was the busiest","Measurable results are the easiest to test and show real ownership."],
+["Skills: Java, Python, C++, Go, Rust, Swift, Kotlin, Ruby, PHP, Scala, Haskell / Experience: 1 year||What is the main concern?","","Breadth without depth for one year","Too senior for the role|No degree is listed|Using unfashionable languages","Nobody is deep in eleven languages after a year. Ask where they're strongest."],
+["Led migration of a monolith to microservices / Team of 12 / Delivered on time||What should you ask to find their actual contribution?","","What did you personally design or build?","How big was the company overall?|Did the migration have a name?|Was the team happy afterwards?","'Led' can mean anything from architect to cheerleader."],
+["Software Engineer, Acme (3 months) / Developer, Beta (4 months) / Engineer, Gamma (5 months) / Developer, Delta (2 months)||What is the fairest next step?","","Ask about the context behind each move","Reject them for job hopping|Assume they were dismissed each time|Ignore the short stints entirely","Layoffs, contracts and closures are common explanations."],
+["Skills: AWS, Docker, Kubernetes, Terraform, Jenkins / Projects: none listed / Certification: AWS Solutions Architect||A DevOps role needs hands-on work. What is the best screening question?","","Tell me about a pipeline you built","Which exam did you study for?|How long is your commute?|Do you prefer AWS to Azure?","Certificates show study. Stories show hands-on use."],
+["Frontend Developer / React, Vue, Angular, Svelte, Next.js, Nuxt / 'Expert in all'||What is the most useful follow-up?","","Which of these have you shipped to production?","Which one do you enjoy reading about most?|Which one has the most GitHub stars?|Which one came out most recently?","Production experience separates real use from tutorials."],
+["Data Analyst / SQL, Excel, Tableau / 'Looking to move into data science'||Is this CV a fit for a data scientist role that needs machine learning?","","Partial fit, so probe their stats and Python","Strong fit, so progress immediately|No fit at all, so reject|Better suited to a frontend role","Analysts often have transferable skills. Check the gaps."],
+["Senior Engineer / Total experience: 2 years||What should you do?","","Check the scope behind the title","Reject because titles are meaningless|Accept the title as proof of seniority|Ask only about the salary","Titles vary between companies. Responsibilities tell the real story."],
+["Java Developer, 6 years / Spring Boot, Hibernate, Kafka / 'Looking for a Python role'||How should you treat this candidate for a Python backend role?","","A promising transfer, so test Python depth early","Reject, since there's no Python listed|Treat them as a complete junior|Redirect them to frontend roles","Backend concepts transfer well between languages."],
+["Developer at several startups / Built many features / Strong team player||What is the main screening gap?","","No dates, so tenure and recency are unclear","No degree is listed on the CV|No photo is included|No hobbies are mentioned anywhere","Ask for roles, dates and what they worked on."],
+["Built a machine learning model with 99% accuracy||Which question best tests this claim?","","What data did you test it on?","Which library did you import first?|How long did training take?|What was the model called?","99% on training data can simply mean overfitting."],
+["QA Engineer / Manual testing, Selenium basics||Is this a fit for an automation-heavy SDET role?","","Partial fit, so probe their coding depth","Strong fit, so progress immediately|No fit at all|Only suited to manual testing roles","SDET roles need real programming, not just basic scripts."],
+["Open-source contributor: merged PRs to Django and Pandas||What does this signal?","","Real code reviewed by other developers","Strong management experience|Experience in sales support|Skill in project budgeting","Merged PRs show code quality and collaboration."],
+["Education: none / Self-taught, 5 years of professional Python work||How should you treat the missing degree?","","Weigh the five years of work more heavily","Reject unless a degree is added|Ask them to enrol first|Treat it as a red flag","Many strong engineers are self-taught. Check what the role really requires."],
+["Sysadmin / Windows Server, Active Directory, PowerShell / 'Looking for a DevOps role'||What should you probe to assess DevOps readiness?","","Automation, scripting and any cloud work","Years of Windows use|Hardware repair skills|Printer support history","PowerShell and automation are the bridge to DevOps."],
+["Role applied for: Backend Developer / CV: every project is a Swift mobile app||What is the best next step?","","Ask about backend exposure and interest","Progress them to the manager|Reject them straight away|Ask them to rewrite the CV","The CV doesn't match the role, but a short call may clarify."],
+["Responsibilities: attended meetings, wrote code, fixed bugs||What is missing from this CV?","","Specific achievements and measurable impact","A list of all the meetings|The employer's address|A longer skills list","Duties describe the job. Achievements describe the person."],
+["Cloud Engineer, 8 years / AWS, GCP, Azure / Led a migration of 200 servers||What is a good probing question?","","What went wrong during the migration?","Which cloud logo do you prefer?|How many cloud providers exist?|When did the migration start?","Real project owners remember the problems."],
+["Team Lead, 10 engineers / No hands-on coding mentioned in the last 4 years||For a hands-on senior engineer role, what is the concern?","","They may have moved away from hands-on coding","They may be too junior|They may lack leadership|They may dislike teams","Check how much they still code before progressing."],
+["Contract Engineer, 2020-2024 / Four 6-month contracts / Each ended on schedule||How should this pattern be read?","","Normal contracting, not a performance concern","A clear sign of poor performance|Evidence of lying on the CV|A reason to avoid all contractors","Fixed-term contracts end on schedule by design."]
+];
+const T=[..."DFCOMMDODO"+"FCCBBDMBCO"+"DFCDMCODOF"+"FBBBCCDDCC"+"DDDMMDDBDO"+"OCCBRJJJJJ"+"JJRRRRRRRR"+"SSSSSS"+"QQQQQQ"+"AAAAAA"+"GGGGGG"+"FFF"+"BBB"+"CCC"+"DDD"+"MM"+"OO"+"RRRR"+"FFFFFF"+"BBBBBB"+"CCCCCC"+"DDDDDD"+"MMMMMM"+"OOOOOO"+"QQQ"+"GGG"+"SSS"+"QQQQQQQGGGGGGGSSSSSSSAAAAAFFFBBBCCCDDDMMOOJJJJ"+"XXXXXXXXXXXXXXXX"+"JJJJJJJJJJJJJJJXXXXXXXXXXXXXXXRRRRRRRRRRRRRRR"+"VVVVVVVVVVVVVVVVVVVV"];
+T[20]="G";T[40]="G";
+if(T.length!==Q.length)console.warn("topic map mismatch",T.length,Q.length);
+Q.forEach((q,i)=>{q.t=T[i];q.id=i;q.gen=!q[0].includes("?")||(i>=20&&i<=29)});
+// Balance option lengths so the right answer isn't the longest
+const FIX={190:"Compressing large JSON payloads|Scheduling recurring background jobs|Styling API error responses for users",169:"Fine-tuning the model weights|Quantisation of the model|Pruning unused layers",206:"Reject, the language is wrong|Reject, the seniority doesn't match|Redirect them to frontend roles instead",182:"Encrypts every request in transit|Deletes old data automatically|Splits databases across regions",74:"Database replication between regions|CSS theming for dark mode|Container scheduling on clusters",124:"A database driver for connections|A UI component library for pages|A cloud billing tool for accounts",181:"Styling web pages across browsers|Encrypting traffic between servers|Storing images in object storage",220:"Which colour should a 404 page use?|How many APIs have you personally seen?|Do you enjoy working with APIs?",208:"No relevant experience at all|A completely different skill set|Only suited to NoSQL roles",218:"Reject the application immediately|Assume they performed poorly|Ignore the dates completely",86:"Compiles code into smaller bundles|Stores user passwords securely|Schedules background jobs nightly",82:"A tiny database for small apps|A mobile OS feature for services|A CSS layout for small screens",178:"Faster downloads on slow networks|Antivirus scanning for files|Automatic backups of devices",175:"To make logins noticeably faster|To compress stored password data|To let admins read passwords",142:"A background update of the app|A pull-down refresh gesture|An in-app popup message",193:"Testing the same site on two browsers|Deploying new code twice a day|Using two cloud providers at once",166:"A computer network built for GPUs|A database designed for images|A type of search index",173:"A database backup technique for web apps|A CSS framework for layout|A type of network firewall",130:"A running container instance|A virtual machine disk file|A Kubernetes cluster node",125:"It never returns any errors|It has no database behind it|It only serves static files",111:"They are exactly the same job|The manager writes all the code|The tech lead handles payroll",112:"Hire immediately for the breadth|Reject automatically as unrealistic|Ignore the CV and use a test",210:"Python listed in a skills section|Python mentioned in their headline|A certificate with no projects",217:"It decides their salary band|It decides the office layout|It makes no difference at all",131:"Writing application code in the cloud|Hardware that writes its own code|Documenting servers in a company wiki",115:"The browser's network cache store|A CSS preprocessor for styles|The server's file system layout",158:"A longer minimum password length|Automatic password resets each month|Encrypted email for all accounts",189:"Slowing down every database query|Compressing API responses|Hiding API errors from clients"};
+Object.entries(FIX).forEach(([i,w])=>Q[i][3]=w);
+[[52,"Cloud","Frontend|Databases|Mobile"],[71,"Security & monitoring","Frontend styling|Mobile UI|Game physics"]].forEach(([i,a,w])=>{Q[i][2]=a;Q[i][3]=w});
+Q.forEach(q=>{if(!q[0].includes("?"))q[2]=q[2].replace(/\s*\(.*\)$/,"")});
+const TOP={J:"Match the role",X:"Screening scenarios",V:"CV screening",R:"Recruiter basics",F:"Frontend",B:"Backend",C:"DevOps & Cloud",D:"Data & Databases",M:"Mobile",S:"Security",Q:"QA & Testing",G:"AI & ML",A:"Architecture & Concepts",O:"Systems & Games"};
+const MODES=[["classic","Classic","10 questions, 3 hearts"],["practice","Practice","10 questions, no hearts. Take your time with each explanation"]];
+const $=s=>document.querySelector(s),app=$("#app");
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const best=(m,v)=>{try{const k="cq-best-"+m;if(v!==undefined)localStorage.setItem(k,v);return +localStorage.getItem(k)||0}catch(e){return 0}};
+let M={mode:"classic",topics:new Set()},S,weak=new Set;
+try{weak=new Set(JSON.parse(localStorage.getItem("cq-weak")||"[]"))}catch(e){}
+const saveWeak=()=>{try{localStorage.setItem("cq-weak",JSON.stringify([...weak]))}catch(e){}};
+const pool=()=>M.mode=="review"?Q.filter(q=>weak.has(q.id)):Q.filter(q=>!M.topics.size||(M.topics.has(q.t)&&!q.gen));
+const FOC="JXRV";
+const cvp=t=>{const x=t.split("||");return x.length>1?`<div class="cv">${x[0].split(" / ").join("<br>")}</div>${x[1]}`:t};
+const pick=(p,n,skip)=>{if(skip)return shuf(p).slice(0,n);const f=shuf(p.filter(q=>FOC.includes(q.t))),r=shuf(p.filter(q=>!FOC.includes(q.t))),a=f.slice(0,6),b=r.slice(0,n-a.length);return shuf([...a,...b,...f.slice(6,6+n-a.length-b.length)])};
+const mk=q=>{const lang=!q[0].includes("?"),W=Array.isArray(q[3])?q[3]:q[3].split("|");return{p:lang?`What is <span class="code">${q[0]}</span> mainly used for?`:cvp(q[0]),raw:q,id:q.id,tag:q.gen?"General":TOP[q.t],a:q[2],e:q[4],o:shuf([q[2],...shuf(W).slice(0,3)])}};
+
+function menu(){
+  if(M.mode=="review"&&!weak.size)M.mode="classic";const c=pool().length;
+  app.innerHTML=`<main class="menu"><h1>Technical Helper</h1><p class="sub">Practice role matching, screening and tech basics for technical recruiting.</p>
+  <h2>Game type</h2><div class="opts">${[...MODES,...(weak.size?[["review","Weak spots","Replay the "+weak.size+" question"+(weak.size>1?"s":"")+" you missed. Get one right to clear it"]]:[])].map(([k,n,d])=>`<button class="opt mode${M.mode==k?" sel":""}" data-m="${k}"><b>${n}</b><span>${d}</span>${k=="classic"&&best(k)?`<small>Best: ${best(k)}</small>`:""}</button>`).join("")}</div>
+  <h2>Topics</h2><p class="sub" style="margin:-4px 0 12px">Topic rounds skip "what is it used for?" questions, since the topic already gives the answer away. Choose All topics for those. All-topics rounds focus on role matching and screening.</p><div class="chips"><button class="chip${M.topics.size?"":" sel"}" data-t="*">All topics (${Q.length})</button>${Object.entries(TOP).map(([k,v])=>`<button class="chip${M.topics.has(k)?" sel":""}" data-t="${k}">${v} (${Q.filter(q=>q.t==k&&!q.gen).length})</button>`).join("")}</div></main>
+  <div class="foot stick"><button class="btn" id="go">Start (${c} questions available)</button></div>`;
+  document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{M.mode=b.dataset.m;menu()});
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=b.dataset.t;if(t=="*")M.topics.clear();else M.topics.has(t)?M.topics.delete(t):M.topics.add(t);menu()});
+  $("#go").onclick=start;
+}
+function start(list){
+  const rev=Array.isArray(list),p=rev?list:pool(),n=Math.min(10,p.length),mode=rev?"review":M.mode;
+  S={mode,q:pick(p,n,rev||M.topics.size||M.mode=="review"),i:0,score:0,hearts:mode=="classic"?3:0,total:n,missed:[]};show();
+}
+function show(){
+  const c=S.cur=mk(S.q.shift());S.done=false;S.sel=null;
+  app.innerHTML=`<div class="top"><button class="x" id="x" aria-label="Quit to menu">✕</button><div class="bar"><i style="width:${S.i/S.total*100}%"></i></div><div class="hearts" id="stat">${S.mode=="classic"?"❤ "+S.hearts:""}</div></div>
+  <main><div class="tag">${c.tag}</div><h1>${c.p}</h1><div class="opts">${c.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join("")}</div></main>
+  <div class="foot" id="foot"><button class="btn" id="go" disabled>Check</button></div>`;
+  $("#x").onclick=menu;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    if(S.done)return;S.sel=+b.dataset.i;
+    document.querySelectorAll(".opt").forEach(x=>x.classList.toggle("sel",x===b));$("#go").disabled=false});
+  $("#go").onclick=()=>grade(S.sel);
+}
+function grade(i){
+  const c=S.cur,ok=c.o[i]===c.a,lives=S.mode=="classic";S.done=true;S.i++;
+  if(ok){S.score++;weak.delete(c.id)}else{weak.add(c.id);S.missed.push(c.raw);if(lives)S.hearts--}saveWeak();
+  document.querySelectorAll(".opt").forEach((b,k)=>{b.disabled=true;b.classList.remove("sel");if(c.o[k]===c.a)b.classList.add("ok");else if(k===i)b.classList.add("no")});
+  if(lives)$("#stat").textContent="❤ "+S.hearts;
+  const fin=(lives&&S.hearts<=0)||S.i>=S.total,f=$("#foot");
+  f.className="foot "+(ok?"ok":"no");if(!ok)f.classList.add("shake");
+  f.innerHTML=`<div class="fb">${ok?"Correct!":"Not quite"}</div><p class="ex">${ok?"":`Answer: ${c.a}. `}${c.e}</p><button class="btn" id="go">${fin?"See results":"Continue"}</button>`;
+  $("#go").onclick=()=>fin?end():show();$("#go").focus();
+}
+function end(){
+  const m=S.mode,b=m=="classic"?Math.max(best(m),S.score):0;if(m=="classic")best(m,b);
+  const title=m=="practice"?"Practice complete":m=="review"?"Review complete":S.hearts<=0?"Out of hearts":S.score==S.total?"Flawless run!":"Round complete!";
+  app.innerHTML=`<div class="top"><div class="bar"><i style="width:100%"></i></div></div>
+  <main class="end"><div class="big">${S.score}/${S.total}</div><h1 style="margin-top:12px">${title}</h1><p>${m=="classic"?"Best score: "+b:"Practice rounds don't count toward best scores."}${weak.size?" Weak spots saved: "+weak.size+".":""}</p>
+  <div class="row">${S.missed.length?`<button class="btn" id="rev">Review missed (${S.missed.length})</button>`:""}<button class="btn blue" id="again">Play again</button><button class="btn ghost" id="menu">Change game or topics</button></div></main>`;
+  $("#again").onclick=()=>start();$("#menu").onclick=menu;if(S.missed.length)$("#rev").onclick=()=>start(S.missed);
+}
+menu();
+</script>
+</body>
+</html>
